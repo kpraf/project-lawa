@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: lawa-backend
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn lawa_backend.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: DATABASE_URL
+        sync: false
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DB_SSL
+        value: true

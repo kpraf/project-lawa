@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+{% load custom_filters %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Water Quality Report - Q{{ current_quarter }} {{ current_year }}</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 10mm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            margin: 10px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .header h2 {
+            margin: 0;
+            color: #333;
+        }
+        .header p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .table-container {
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+        .table-container h3 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+            table-layout: auto;
+            font-size: 9px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 3px 4px;
+            text-align: center;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        .Black { background-color: black; color: white; }
+        .Green { background-color: #4CAF50; color: white; }
+        .Yellow { background-color: #FFEB3B; color: black; }
+        .Orange { background-color: #FF9800; color: black; }
+        .Red { background-color: #F44336; color: white; }
+        .Blue { background-color: #2196F3; color: white; }
+        .Yellow-Green { background-color: #9ACD32; color: black; }
+        .value {
+            font-weight: bold;
+            font-size: 10px;
+        }
+        .class-text {
+            font-size: 8px;
+            margin-top: 2px;
+        }
+        .station-cell {
+            font-weight: bold;
+            background-color: #f8f9fa;
+            text-align: left;
+            padding-left: 8px;
+            font-size: 10.5px;
+        }
+        .parameter-header {
+            background-color: #e9ecef;
+        }
+        .month-header {
+            background-color: #f8f9fa;
+        }
+        .legend-lists-wrap {
+            display: flex;
+            justify-content: flex-start;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+            margin-bottom: 2px;
+        }
+        .legend-list-param {
+            margin-top: 0;
+            margin-bottom: 2px;
+        }
+        .legend-list-title {
+            font-weight: bold;
+            font-size: 0.95em;
+            margin-bottom: 1px;
+        }
+        .legend-list-label {
+            display: flex;
+            align-items: center;
+            font-size: 8.5px;
+            margin-bottom: 1px;
+            margin-top: 0;
+        }
+        .legend-swatch {
+            width: 11px;
+            height: 8px;
+            border-radius: 2px;
+            display: inline-block;
+            margin-right: 4px;
+            border: 1px solid #bbb;
+        }
+        .legend-list-desc {
+            font-size: 8px;
+        }
+        @media print {
+            body {
+                margin: 0;
+            }
+            .table-container {
+                page-break-inside: avoid;
+            }
+            table, th, td {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Water Quality Report</h2>
+        <p>Quarter {{ current_quarter }} - {{ current_year }}</p>
+    </div>
+
+    {% for group in param_groups %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2" style="width: 15%;">Monitoring Stations</th>
+                    {% for param in group %}
+                        <th colspan="{{ selected_months|length }}" class="parameter-header">{{ param }}</th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for param in group %}
+                        {% for month in selected_months %}
+                            <th class="month-header">{{ month }}</th>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in table_data %}
+                <tr>
+                    <td class="station-cell">{{ row.station }}</td>
+                    {% for param in group %}
+                        {% for month in selected_months %}
+                            {% with details=row.parameters|get_item:param|get_item:month %}
+                                {% if details %}
+                                    <td class="{{ details.color }}">
+                                        <div class="value">{{ details.value }}</div>
+                                        <div class="class-text">{{ details.class }}</div>
+                                    </td>
+                                {% else %}
+                                    <td class="Black">No Data</td>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Dynamic per-parameter legend -->
+        <div class="legend-lists-wrap">
+            {% for param in group %}
+                {% with legends|get_item:param as legend_items %}
+                    {% if legend_items %}
+                    <div class="legend-list-param">
+                        <div class="legend-list-title">
+                            {{ param }}{% if legend_items.0.unit %} ({{ legend_items.0.unit }}){% endif %}
+                        </div>
+                        {% for item in legend_items %}
+                        <div class="legend-list-label">
+                            <span
+                                class="legend-swatch"
+                                style="background-color: {{ item.color|default:'#ccc' }};">
+                            </span>
+                            {{ item.label }}
+                            {% if item.desc %}
+                                <span class="legend-list-desc">{{ item.desc }}</span>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>

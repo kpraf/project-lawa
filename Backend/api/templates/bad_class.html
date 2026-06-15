@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Water Quality Alert</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f9fc;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #d9534f;
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .content {
+            padding: 20px;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+        }
+        .details-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        .details-table th, .details-table td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        .details-table th {
+            background-color: #f2f2f2;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        ⚠️ Water Quality Alert
+    </div>
+    <div class="content">
+        <p>Attention Team,</p>
+
+        <p>A critical water quality reading has been detected. Below are the details:</p>
+
+        <table class="details-table">
+            <tr>
+                <th>Sensor</th>
+                <td>{{ sensor }}</td>
+            </tr>
+            <tr>
+                <th>Station</th>
+                <td>{{ station }}</td>
+            </tr>
+            <tr>
+                <th>Time</th>
+                <td>{{ time }}</td>
+            </tr>
+            <tr>
+                <th>Recorded Value</th>
+                <td>{{ value }}</td>
+            </tr>
+            <tr>
+                <th>Classification</th>
+                <td>{{ classification }}</td>
+            </tr>
+        </table>
+
+        <p>Please take immediate action to investigate this issue.</p>
+    </div>
+
+    <div class="footer">
+        This is an automated message. Please do not reply directly to this email.
+    </div>
+</div>
+
+</body>
+</html>

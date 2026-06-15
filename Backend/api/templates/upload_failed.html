@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Failed Alert</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f9fc;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #dc3545;
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .content {
+            padding: 20px;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+        }
+        .details-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        .details-table th, .details-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            width: 50%;
+        }
+        .details-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+        }
+        .details-table td {
+            color: #666;
+        }
+        .error-message {
+            background-color: #fff3f3;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            ❌ Upload Failed: {{ reason }}
+        </div>
+        <div class="content">
+            <p>Hello Team,</p>
+
+            <p>We encountered an error while trying to upload water quality data:</p>
+
+            <table class="details-table">
+                <tr>
+                    <th>Station</th>
+                    <td>{{ station }}</td>
+                </tr>
+                <tr>
+                    <th>Sensor</th>
+                    <td>{{ sensor }}</td>
+                </tr>
+                <tr>
+                    <th>Attempted Value</th>
+                    <td>{{ value }}</td>
+                </tr>
+                <tr>
+                    <th>Time</th>
+                    <td>{{ time }}</td>
+                </tr>
+            </table>
+
+            <div class="error-message">
+                <strong>Error Details:</strong><br>
+                {{ error_message }}
+            </div>
+
+            <p>Please investigate this issue and ensure the data is uploaded correctly.</p>
+        </div>
+
+        <div class="footer">
+            This is an automated system notification. Please do not reply directly.
+        </div>
+    </div>
+</body>
+</html>

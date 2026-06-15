@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Upload Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f9fc;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #5cb85c;  /* Green color for success */
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .content {
+            padding: 20px;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+        }
+        .details-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        .details-table th, .details-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            width: 50%;
+        }
+        .details-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+        }
+        .details-table td {
+            color: #666;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        ✅ New Data Upload
+    </div>
+    <div class="content">
+        <p>Hello Team,</p>
+
+        <p>New water quality data has been successfully uploaded to the system:</p>
+
+        <table class="details-table">
+            <tr>
+                <th>Station</th>
+                <td>{{ station }}</td>
+            </tr>
+            <tr>
+                <th>Sensor</th>
+                <td>{{ sensor }}</td>
+            </tr>
+            <tr>
+                <th>Time</th>
+                <td>{{ time }}</td>
+            </tr>
+            <tr>
+                <th>Value</th>
+                <td>{{ value }}</td>
+            </tr>
+            <tr>
+                <th>Classification</th>
+                <td>{{ classification }}</td>
+            </tr>
+        </table>
+
+        <p>The data has been processed and is now available in the system.</p>
+    </div>
+
+    <div class="footer">
+        This is an automated system notification. Please do not reply directly.
+    </div>
+</div>
+
+</body>
+</html>
