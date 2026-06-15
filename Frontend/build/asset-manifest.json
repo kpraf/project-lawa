@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.738295c1.css",
+    "main.js": "/static/js/main.afb8d409.js",
+    "static/media/mathew.png": "/static/media/mathew.e4c4fe983a7fc3461860.png",
+    "static/media/device.jpg": "/static/media/device.7152c0c856332fd313f8.jpg",
+    "static/media/emman.png": "/static/media/emman.801a1ca63b78ac28a49f.png",
+    "static/media/jensen.png": "/static/media/jensen.2e0822fd3565831c83d8.png",
+    "static/media/borge.png": "/static/media/borge.a1004015364f867dedc1.png",
+    "static/media/dashboard_2.png": "/static/media/dashboard_2.e39279fff3e13ef65c49.png",
+    "static/media/cj2.png": "/static/media/cj2.57fc6cd0bc49da06df14.png",
+    "static/media/project_lawa_logo.png": "/static/media/project_lawa_logo.2ccced16aae322f15043.png",
+    "static/media/linegraph.png": "/static/media/linegraph.de7c8b2fd140436a12de.png",
+    "static/media/laguna_lake.jpg": "/static/media/laguna_lake.1dd3b789c3fb8e4b1e36.jpg",
+    "static/media/project_lawa_logo_2.png": "/static/media/project_lawa_logo_2.1d05110bc874b3af4c78.png",
+    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
+    "index.html": "/index.html",
+    "main.738295c1.css.map": "/static/css/main.738295c1.css.map",
+    "main.afb8d409.js.map": "/static/js/main.afb8d409.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.738295c1.css",
+    "static/js/main.afb8d409.js"
+  ]
+}
