@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tooltip Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-8 bg-gray-100">
+    <h1 class="text-2xl font-bold mb-6">Tooltip Optimization Test</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Test Card 1 -->
+        <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow">
+            <h3 class="font-bold text-lg mb-2">pH Level</h3>
+            <p class="text-3xl font-bold text-blue-600">7.2</p>
+            <p class="text-sm text-gray-600">Units: pH</p>
+            <p class="text-xs text-gray-500 mt-2">2024-12-26 14:30</p>
+        </div>
+        
+        <!-- Test Card 2 -->
+        <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow">
+            <h3 class="font-bold text-lg mb-2">Dissolved Oxygen</h3>
+            <p class="text-3xl font-bold text-green-600">6.8</p>
+            <p class="text-sm text-gray-600">Units: mg/L</p>
+            <p class="text-xs text-gray-500 mt-2">2024-12-26 14:30</p>
+        </div>w
+        
+        <!-- Test Card 3 -->
+        <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow">
+            <h3 class="font-bold text-lg mb-2">Temperature</h3>
+            <p class="text-3xl font-bold text-orange-600">28.5</p>
+            <p class="text-sm text-gray-600">Units: °C</p>
+            <p class="text-xs text-gray-500 mt-2">2024-12-26 14:30</p>
+        </div>
+    </div>
+    
+    <div class="mt-8 p-4 bg-white rounded-lg shadow">
+        <h2 class="text-xl font-bold mb-4">Tooltip Optimizations Applied:</h2>
+        <ul class="list-disc list-inside space-y-2 text-gray-700">
+            <li><strong>Dynamic Height Calculation:</strong> Tooltips now calculate their content height dynamically instead of using fixed heights that caused scrolling.</li>
+            <li><strong>Smart Positioning:</strong> Improved logic to position tooltips above or below based on available viewport space.</li>
+            <li><strong>Responsive Arrow Positioning:</strong> Arrows now position themselves correctly relative to the trigger element, even when tooltips reposition.</li>
+            <li><strong>Optimized Content Structure:</strong> Removed redundant wrapper divs and styling to improve performance and reduce DOM complexity.</li>
+            <li><strong>Better Overflow Handling:</strong> Set overflow to visible to prevent unwanted scrollbars while maintaining proper boundaries.</li>
+            <li><strong>Improved Width Management:</strong> Better responsive width calculations for different screen sizes.</li>
+        </ul>
+    </div>
+    
+    <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h3 class="text-lg font-bold text-blue-800 mb-2">Key Changes Made:</h3>
+        <div class="text-sm text-blue-700 space-y-1">
+            <p><strong>HoverModal.js:</strong></p>
+            <ul class="list-disc list-inside ml-4 space-y-1">
+                <li>Removed fixed height constraints</li>
+                <li>Added dynamic content height measurement</li>
+                <li>Improved positioning algorithm for better viewport awareness</li>
+                <li>Fixed arrow positioning to be relative to tooltip position</li>
+                <li>Set overflow-y to visible to prevent scrollbars</li>
+            </ul>
+            <p class="mt-3"><strong>S_Container.js:</strong></p>
+            <ul class="list-disc list-inside ml-4 space-y-1">
+                <li>Simplified tooltip content structure</li>
+                <li>Removed redundant wrapper divs with inline styles</li>
+                <li>Optimized content rendering for better performance</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

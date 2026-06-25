@@ -1,0 +1,7 @@
+﻿Month,Stations,BOD (mg/L),Dissolved Oxygen (mg/L),"Fecal Coliform, MPN/100ml (Geomean)",pH (units),Ammonia (mg/L),Nitrate (mg/L),Inorganic Phospate (mg/L),ORP,Temperature,TDS
+Jan-25,Stn. I (Central West Bay),,5.39754,,8.077116935,,,,223.3933,25.52981452,585.5445726
+Feb-25,Stn. I (Central West Bay),,6.236415179,,6.242263393,,,,230.9687589,25.84375893,793.2833616
+Mar-25,Stn. I (Central West Bay),,7.101157258,,6.986399194,,,,223.3842621,28.43999597,799.0075847
+Apr-25,Stn. I (Central West Bay),,5.6629625,,7.278416667,,,,179.8622208,27.22619583,660.4602208
+May-25,Stn. I (Central West Bay),,5.448461538,,7.675714286,,,,218.0014286,28.50333333,918.204
+Jun-25,Stn. I (Central West Bay),,73.02640652,,6.746646655,,,,486.2248273,27.9444264,117.1277386
