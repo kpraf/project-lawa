@@ -1,0 +1,10 @@
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+*.sqlite3
+Backend/data.csv
+Backend/report.csv
+data_export.sql
