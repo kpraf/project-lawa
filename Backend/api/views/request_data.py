@@ -83,6 +83,12 @@ def getDate(request):
 
 
 def getAll(request):
+    from django.core.cache import cache
+    cache_key = f"getAll_{request.GET.urlencode()}"
+    cached = cache.get(cache_key)
+    if cached:
+        return JsonResponse(cached, status=200)
+
     try:
         def groupFunction(readings, is_datetime, stationObjects, data_type):
                 all_sensors = DimSensor.objects.all()
@@ -122,8 +128,8 @@ def getAll(request):
                                 }]
                             })
 
-                    return JsonResponse({"metadata": metadata, "series": series}, status=200)
-            
+                    return {"metadata": metadata, "series": series}
+
                 grouped = defaultdict(list)
 
                 for r in readings:
@@ -151,10 +157,7 @@ def getAll(request):
                         "data": datapoints
                     })
 
-                return JsonResponse({
-                    "metadata": metadata,
-                    "series": series
-                }, status=200)
+                return {"metadata": metadata, "series": series}
         
         station_codes = request.GET.getlist("station")
         startDate = request.GET.get("startDate")
@@ -178,94 +181,80 @@ def getAll(request):
                     time__date__range=(startDate, endDate),
                     station__id__in=stationObjects.values_list("id", flat=True)
                 )
-                return groupFunction(readings=readings, is_datetime=True, stationObjects=stationObjects, data_type="custom_date_range_raw_data")
-                    
-
-            if (endDate - startDate).days <= 13:
+            elif (endDate - startDate).days <= 13:
                 readings = DailySensorReading.objects.select_related("station", "sensor","time").filter(
                     time__date__range=(startDate, endDate),
                     station__in=stationObjects
                 )
-                return groupFunction(readings=readings, is_datetime=False, stationObjects=stationObjects, data_type="custom_date_range_daily_average")
-            
-            if (endDate - startDate).days <= 90:
+            elif (endDate - startDate).days <= 90:
                 readings = WeeklySensorReading.objects.select_related("station", "sensor","time").filter(
                     time__date__range=(startDate, endDate),
                     station__in=stationObjects
                 )
-                return groupFunction(readings=readings, is_datetime=False, stationObjects=stationObjects, data_type="custom_date_range_weekly_average")
-            
+            else:
+                readings = FactSensorReading.objects.select_related("station", "sensor","time").filter(
+                    time__date__range=(startDate, endDate),
+                    station__in=stationObjects
+                )
+            data = groupFunction(readings=readings, is_datetime=(endDate-startDate).days<=4, stationObjects=stationObjects, data_type="custom_date_range")
+            cache.set(cache_key, data, 300)
+            return JsonResponse(data, status=200)
 
-            readings = FactSensorReading.objects.select_related("station", "sensor","time").filter(
-                time__date__range=(startDate, endDate),
-                station__in=stationObjects
-            )
+        def _cache_and_return(readings, is_datetime, data_type):
+            data = groupFunction(readings=readings, is_datetime=is_datetime, stationObjects=stationObjects, data_type=data_type)
+            cache.set(cache_key, data, 300)
+            return JsonResponse(data, status=200)
 
-            return groupFunction(readings=readings, is_datetime=False, stationObjects=stationObjects, data_type="custom_date_range_monthly_average")
-        
         if status == "Today":
             today = localtime(timezone.now()).date()
             readings = RawSensorReading.objects.select_related("station", "sensor").filter(
-                time__year=today.year,
-                time__month=today.month,
-                time__day=today.day,
+                time__year=today.year, time__month=today.month, time__day=today.day,
                 station__in=stationObjects
             )
+            return _cache_and_return(readings, True, "today_raw_data")
 
-            return groupFunction(readings=readings, is_datetime=True, stationObjects=stationObjects, data_type="today_raw_data")
         if status == "Yesterday":
             yesterday = localtime(timezone.now()).date() - timezone.timedelta(days=1)
             readings = RawSensorReading.objects.select_related("station", "sensor").filter(
-                time__year=yesterday.year,
-                time__month=yesterday.month,
-                time__day=yesterday.day,
+                time__year=yesterday.year, time__month=yesterday.month, time__day=yesterday.day,
                 station__in=stationObjects
             )
+            return _cache_and_return(readings, True, "yesterday_raw_data")
 
-            return groupFunction(readings=readings, is_datetime=True, stationObjects=stationObjects, data_type="yesterday_raw_data")
-        
         if status == "Last 7 Days":
-            last_7_days = localtime(timezone.now()).date() - timezone.timedelta(days=7)
             readings = DailySensorReading.objects.select_related("station", "sensor").filter(
-                time__date__gte=last_7_days,
+                time__date__gte=localtime(timezone.now()).date() - timezone.timedelta(days=7),
                 station__in=stationObjects
             )
+            return _cache_and_return(readings, False, "last_7_day_daily_averaged_data")
 
-            return groupFunction(readings=readings, is_datetime=False, stationObjects=stationObjects, data_type="last_7_day_daily_averaged_data")
-        
         if status == "Last 30 Days":
-            last_30_days = localtime(timezone.now()).date() - timezone.timedelta(days=30)
             readings = WeeklySensorReading.objects.select_related("station", "sensor").filter(
-                time__date__gte=last_30_days,
+                time__date__gte=localtime(timezone.now()).date() - timezone.timedelta(days=30),
                 station__in=stationObjects
             )
+            return _cache_and_return(readings, False, "last_30_days_weekly_averaged_data")
 
-            return groupFunction(readings=readings, is_datetime=False, stationObjects=stationObjects, data_type="last_30_days_weekly_averaged_data")
-        
         if status == "Last 6 Months":
-            last_6_months = localtime(timezone.now()).date() - timezone.timedelta(days=180)
             readings = FactSensorReading.objects.select_related("station", "sensor").filter(
-                time__date__gte=last_6_months,
+                time__date__gte=localtime(timezone.now()).date() - timezone.timedelta(days=180),
                 station__in=stationObjects
             )
+            return _cache_and_return(readings, False, "last_6_months_averaged_monthly_data")
 
-            return groupFunction(readings=readings, is_datetime=False, stationObjects=stationObjects, data_type="last_6_months_averaged_monthly_data")
-        
         if status == "Last 1 Year":
-            last_1_year = localtime(timezone.now()).date() - timezone.timedelta(days=365)
             readings = FactSensorReading.objects.select_related("station", "sensor").filter(
-                time__date__gte=last_1_year,
+                time__date__gte=localtime(timezone.now()).date() - timezone.timedelta(days=365),
                 station__in=stationObjects
             )
+            return _cache_and_return(readings, False, "last_1_year_averaged_monthly_data")
 
-            return groupFunction(readings=readings, is_datetime=False, stationObjects=stationObjects, data_type="last_1_year_averaged_monthly_data")
         if status == "All Time" or not status:
             readings = FactSensorReading.objects.select_related("station", "sensor").filter(
                 station__in=stationObjects
             )
+            return _cache_and_return(readings, False, "all_time_averaged_monthly_data")
 
-            return groupFunction(readings=readings, is_datetime=False, stationObjects=stationObjects, data_type="all_time_averaged_monthly_data")
-        
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)
 
