@@ -26,8 +26,7 @@ urlpatterns = [
     path("auth/", include("authentication.urls")),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # curl -X POST -F "title=2021 Q1" -F "pdf=@2021q1.pdf" https://api.projectlawa.org/reports/upload/
 # curl -X POST -F "title=2021 Q2" -F "pdf=@2021q2.pdf" https://api.projectlawa.org/reports/upload/
