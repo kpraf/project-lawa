@@ -271,66 +271,63 @@ def getAll(request):
 
 def RecentData(request):
     try:
-        
-
-        
         allowed_params = ["ORP", "DO", "pH", "Temperature", "Turbidity", "TDS"]
-
-        display_name_map = {
-            "DO": "DO",
-            "TDS": "TDS",
-            "ORP": "ORP",
-            "pH": "pH",
-            "Temperature": "Temperature",
-            "Turbidity": "Turbidity"
-        }
 
         stations = DimStation.objects.filter(code__in=["I", "II"]).order_by("code")
         sensors = DimSensor.objects.filter(name__in=allowed_params)
-        results = []
 
+        # One query: get the latest 2 readings per station+sensor using window function
+        from django.db.models import Window, F
+        from django.db.models.functions import RowNumber
+
+        readings = (
+            RawSensorReading.objects
+            .filter(station__in=stations, sensor__in=sensors)
+            .annotate(rn=Window(
+                expression=RowNumber(),
+                partition_by=[F("station"), F("sensor")],
+                order_by=F("time").desc()
+            ))
+            .filter(rn__lte=2)
+            .select_related("station", "sensor")
+            .values("station__code", "sensor__name", "time", "value", "rn")
+        )
+
+        # Group in Python
+        grouped = defaultdict(dict)
+        for r in readings:
+            sc = r["station__code"]
+            sn = r["sensor__name"]
+            grouped[sc].setdefault(sn, [None, None])
+            grouped[sc][sn][r["rn"] - 1] = r
+
+        results = []
         for station in stations:
             station_data = {}
-
+            sc = station.code
             for sensor in sensors:
-                
-                try:
-                    
-                    data = list(
-                        RawSensorReading.objects
-                        .filter(station=station, sensor=sensor)
-                        .order_by("-time")
-                        .values("time", "value")[:2]
-                    )
-
-                    if data:
-                        current = data[0]
-                        before = data[1] if len(data) > 1 else []
-
-                        if before:
-                            status = (
-                                "Higher" if current["value"] > before["value"]
-                                else "Lower" if current["value"] < before["value"]
-                                else "Equal"
-                            )
-                        else:
-                            status = "N/A"
-
-                        water_quality_info = WaterQuality(sensor.name, current["value"])
-
-                        station_data[sensor.name] = {
-                            "time": current["time"],
-                            "value": current["value"],
-                            "status": status,
-                            "before": before["value"] if before else [],
-                            **water_quality_info
-                        }
+                data = grouped.get(sc, {}).get(sensor.name)
+                if data and data[0]:
+                    current = data[0]
+                    before = data[1]
+                    if before:
+                        status = (
+                            "Higher" if current["value"] > before["value"]
+                            else "Lower" if current["value"] < before["value"]
+                            else "Equal"
+                        )
                     else:
-                        station_data[sensor.name] = WaterQuality(sensor.name, None)
-                except Exception:
-                    station_data[sensor.name] = None
-
-            results.append({f"Station {station.code}": station_data})
+                        status = "N/A"
+                    station_data[sensor.name] = {
+                        "time": current["time"],
+                        "value": current["value"],
+                        "status": status,
+                        "before": before["value"] if before else [],
+                        **WaterQuality(sensor.name, current["value"])
+                    }
+                else:
+                    station_data[sensor.name] = WaterQuality(sensor.name, None)
+            results.append({f"Station {sc}": station_data})
 
         return JsonResponse(results, safe=False, status=200)
 
@@ -341,8 +338,6 @@ def RecentData(request):
 
 
 def getRecent(request, station_id):
-    parameters = {}
-
     display_name_map = {
         "DO": "Dissolved Oxygen",
         "TDS": "Total Dissolved Solids"
@@ -352,26 +347,37 @@ def getRecent(request, station_id):
         station = DimStation.objects.get(code=station_id)
         sensors = DimSensor.objects.all()
 
+        # One query for all sensors at once
+        from django.db.models import Window, F
+        from django.db.models.functions import RowNumber
+
+        readings = (
+            RawSensorReading.objects
+            .filter(station=station)
+            .annotate(rn=Window(
+                expression=RowNumber(),
+                partition_by=[F("sensor")],
+                order_by=F("time").desc()
+            ))
+            .filter(rn=1)
+            .select_related("sensor")
+            .values("sensor__name", "time", "value")
+        )
+
+        latest = {r["sensor__name"]: r for r in readings}
+
+        parameters = {}
         for sensor in sensors:
             display_name = display_name_map.get(sensor.name, sensor.name)
-            try:
-                reading = (
-                    RawSensorReading.objects
-                    .filter(station=station, sensor=sensor)
-                    .order_by('-time')
-                    .first()
-                )
-                if reading:
-                    quality = WaterQuality(sensor.name, reading.value)
-                    parameters[display_name] = {
-                        "time": reading.time,
-                        "value": reading.value,
-                        **quality
-                    }
-                else:
-                    parameters[sensor.name] = WaterQuality(sensor.name, None)
-            except Exception:
-                parameters[sensor.name] = None
+            r = latest.get(sensor.name)
+            if r:
+                parameters[display_name] = {
+                    "time": r["time"],
+                    "value": r["value"],
+                    **WaterQuality(sensor.name, r["value"])
+                }
+            else:
+                parameters[display_name] = WaterQuality(sensor.name, None)
 
         return JsonResponse({"Parameters": parameters}, status=200)
     except DimStation.DoesNotExist:
