@@ -1,0 +1,13 @@
+{
+  "reports": [
+    {"title": "Q1 2021", "pdf": "/data/reports/Water_Quality_Q1_2021.pdf"},
+    {"title": "Q2 2021", "pdf": "/data/reports/Water_Quality_Q2_2021.pdf"},
+    {"title": "Q3 2021", "pdf": "/data/reports/Water_Quality_Q3_2021.pdf"},
+    {"title": "Q4 2021", "pdf": "/data/reports/Water_Quality_Q4_2021.pdf"},
+    {"title": "Q1 2022", "pdf": "/data/reports/Water_Quality_Q1_2022.pdf"},
+    {"title": "Q2 2022", "pdf": "/data/reports/Water_Quality_Q2_2022.pdf"},
+    {"title": "Q3 2022", "pdf": "/data/reports/Water_Quality_Q3_2022.pdf"},
+    {"title": "Q4 2022", "pdf": "/data/reports/Water_Quality_Q4_2022.pdf"},
+    {"title": "Q1 2023", "pdf": "/data/reports/Water_Quality_Q1_2023.pdf"}
+  ]
+}
