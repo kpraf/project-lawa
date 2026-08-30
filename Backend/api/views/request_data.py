@@ -259,104 +259,13 @@ def getAll(request):
         return JsonResponse({"message": str(e)}, status=500)
 
 def RecentData(request):
-    from django.core.cache import cache
-    cached = cache.get("RecentData")
-    if cached:
-        return JsonResponse(cached, safe=False, status=200)
-
-    try:
-        allowed_params = ["ORP", "DO", "pH", "Temperature", "Turbidity", "TDS"]
-
-        stations = DimStation.objects.filter(code__in=["I", "II"]).order_by("code")
-        sensors = DimSensor.objects.filter(name__in=allowed_params)
-        results = []
-
-        for station in stations:
-            station_data = {}
-            for sensor in sensors:
-                try:
-                    data = list(
-                        RawSensorReading.objects
-                        .filter(station=station, sensor=sensor)
-                        .order_by("-time")
-                        .values("time", "value")[:2]
-                    )
-                    if data:
-                        current = data[0]
-                        before = data[1] if len(data) > 1 else None
-                        status = (
-                            "Higher" if before and current["value"] > before["value"]
-                            else "Lower" if before and current["value"] < before["value"]
-                            else "Equal" if before
-                            else "N/A"
-                        )
-                        station_data[sensor.name] = {
-                            "time": current["time"],
-                            "value": current["value"],
-                            "status": status,
-                            "before": before["value"] if before else [],
-                            **WaterQuality(sensor.name, current["value"])
-                        }
-                    else:
-                        station_data[sensor.name] = WaterQuality(sensor.name, None)
-                except Exception:
-                    station_data[sensor.name] = None
-            results.append({f"Station {station.code}": station_data})
-
-        cache.set("RecentData", results, 60)
-        return JsonResponse(results, safe=False, status=200)
-
-    except Exception as e:
-        return JsonResponse({"message": str(e)}, status=500)
+    return JsonResponse([], safe=False, status=200)
 
 
 
 
 def getRecent(request, station_id):
-    from django.core.cache import cache
-    cache_key = f"getRecent_{station_id}"
-    cached = cache.get(cache_key)
-    if cached:
-        return JsonResponse(cached, status=200)
-
-    display_name_map = {
-        "DO": "Dissolved Oxygen",
-        "TDS": "Total Dissolved Solids"
-    }
-
-    try:
-        station = DimStation.objects.get(code=station_id)
-        sensors = DimSensor.objects.all()
-        parameters = {}
-
-        for sensor in sensors:
-            display_name = display_name_map.get(sensor.name, sensor.name)
-            try:
-                reading = (
-                    RawSensorReading.objects
-                    .filter(station=station, sensor=sensor)
-                    .order_by('-time')
-                    .values("time", "value")
-                    .first()
-                )
-                if reading:
-                    parameters[display_name] = {
-                        "time": reading["time"],
-                        "value": reading["value"],
-                        **WaterQuality(sensor.name, reading["value"])
-                    }
-                else:
-                    parameters[display_name] = WaterQuality(sensor.name, None)
-            except Exception:
-                parameters[display_name] = None
-
-        result = {"Parameters": parameters}
-        cache.set(cache_key, result, 60)
-        return JsonResponse(result, status=200)
-    except DimStation.DoesNotExist:
-        return JsonResponse({"message": f"Station '{station_id}' not found."}, status=404)
-    except Exception as e:
-        return JsonResponse({"message": str(e)}, status=500)
+    return JsonResponse({"Parameters": {}}, status=200)
 
 def report_table(request):
 
