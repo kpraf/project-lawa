@@ -766,3 +766,195 @@ Mar-23,Stn. XVIII (Pagsanjan),1.00,7.70,67.00,7.90,0.005,0.050,0.190
 Mar-23,Stn. XX (GEMS),1.00,7.60,513.00,8.00,0.020,0.620,0.260
 Mar-23,Stn. XXI (Cardona),1.00,7.80,141.00,8.00,0.080,0.700,0.250
 Mar-23,Stn. XXII (Jala-jala),2.00,7.70,167.00,8.00,0.005,0.560,0.230
+Jan-25,Stn. I (Central West Bay),2.00,7.00,19.00,,,,
+Jan-25,Stn. II (East Bay),2.00,8.00,18.00,,,,
+Jan-25,Stn. IV (Central Bay),1.00,7.00,45.00,,,,
+Jan-25,Stn. V (Northern West Bay),1.00,8.00,53.00,,,,
+Jan-25,Stn. VIII (South Bay),2.00,8.00,36.00,,,,
+Jan-25,Stn. XIII (Taytay),1.00,8.00,62.00,,,,
+Jan-25,Stn. XV (San Pedro),1.00,7.00,286.00,,,,
+Jan-25,Stn. XVI (Sta. Rosa),1.00,8.00,241.00,,,,
+Jan-25,Stn. XVII (Sanctuary),1.00,7.00,28.00,,,,
+Jan-25,Stn. XVIII (Pagsanjan),2.00,8.00,41.00,,,,
+Jan-25,Stn. XIX (Muntinlupa),3.00,7.00,96.00,,,,
+Jan-25,Stn. XX (GEMS),2.00,7.00,242.00,,,,
+Jan-25,Stn. XXI (Cardona),0.50,8.00,19.00,,,,
+Jan-25,Stn. XXII (Jala-jala),2.00,8.00,64.00,,,,
+Jan-25,Stn. XXIII (Lumban),2.00,7.00,19.00,,,,
+Jan-25,Stn. XXIV (Cardona North Central Bay),0.50,7.00,59.00,,,,
+Feb-25,Stn. I (Central West Bay),0.50,8.00,19.00,,,,
+Feb-25,Stn. II (East Bay),0.50,8.00,18.00,,,,
+Feb-25,Stn. IV (Central Bay),1.00,8.00,44.00,,,,
+Feb-25,Stn. V (Northern West Bay),2.00,8.00,154.00,,,,
+Feb-25,Stn. VIII (South Bay),0.50,8.00,59.00,,,,
+Feb-25,Stn. XIII (Taytay),0.50,7.00,219.00,,,,
+Feb-25,Stn. XV (San Pedro),1.00,8.00,182.00,,,,
+Feb-25,Stn. XVI (Sta. Rosa),2.00,8.00,329.00,,,,
+Feb-25,Stn. XVII (Sanctuary),0.50,8.00,28.00,,,,
+Feb-25,Stn. XVIII (Pagsanjan),0.50,8.00,18.00,,,,
+Feb-25,Stn. XIX (Muntinlupa),3.00,8.00,120.00,,,,
+Feb-25,Stn. XX (GEMS),1.00,8.00,293.00,,,,
+Feb-25,Stn. XXI (Cardona),0.50,8.00,19.00,,,,
+Feb-25,Stn. XXII (Jala-jala),0.50,8.00,35.00,,,,
+Feb-25,Stn. XXIII (Lumban),0.50,8.00,19.00,,,,
+Feb-25,Stn. XXIV (Cardona North Central Bay),0.50,8.00,30.00,,,,
+Mar-25,Stn. I (Central West Bay),3.00,8.00,19.00,,,,
+Mar-25,Stn. II (East Bay),2.00,8.00,24.00,,,,
+Mar-25,Stn. IV (Central Bay),2.00,8.00,19.00,,,,
+Mar-25,Stn. V (Northern West Bay),3.00,8.00,231.00,,,,
+Mar-25,Stn. VIII (South Bay),2.00,8.00,30.00,,,,
+Mar-25,Stn. XIII (Taytay),3.00,8.00,404.00,,,,
+Mar-25,Stn. XV (San Pedro),2.00,8.00,45.00,,,,
+Mar-25,Stn. XVI (Sta. Rosa),2.00,8.00,87.00,,,,
+Mar-25,Stn. XVII (Sanctuary),2.00,8.00,18.00,,,,
+Mar-25,Stn. XVIII (Pagsanjan),2.00,8.00,18.00,,,,
+Mar-25,Stn. XIX (Muntinlupa),1.00,8.00,84.00,,,,
+Mar-25,Stn. XX (GEMS),2.00,8.00,259.00,,,,
+Mar-25,Stn. XXI (Cardona),1.00,9.00,19.00,,,,
+Mar-25,Stn. XXII (Jala-jala),1.00,8.00,18.00,,,,
+Mar-25,Stn. XXIII (Lumban),2.00,8.00,39.00,,,,
+Mar-25,Stn. XXIV (Cardona North Central Bay),2.00,8.00,19.00,,,,
+Apr-25,Stn. I (Central West Bay),3.00,7.00,29.00,8.10,0.090,0.050,0.038
+Apr-25,Stn. II (East Bay),4.00,8.00,35.00,8.40,0.040,0.050,0.047
+Apr-25,Stn. IV (Central Bay),4.00,7.00,29.00,8.00,0.090,0.050,0.037
+Apr-25,Stn. V (Northern West Bay),3.00,7.00,40.00,8.60,0.070,0.050,0.052
+Apr-25,Stn. VIII (South Bay),2.00,8.00,19.00,8.80,0.040,0.100,0.031
+Apr-25,Stn. XIII (Taytay),2.00,7.00,56.00,8.30,0.050,0.050,0.056
+Apr-25,Stn. XV (San Pedro),2.00,7.00,105.00,8.10,0.060,0.200,0.100
+Apr-25,Stn. XVI (Sta. Rosa),2.00,8.00,47.00,8.70,0.020,0.050,0.043
+Apr-25,Stn. XVII (Sanctuary),3.00,8.00,19.00,8.60,0.010,0.050,0.094
+Apr-25,Stn. XVIII (Pagsanjan),2.00,8.00,25.00,8.40,0.030,0.050,0.031
+Apr-25,Stn. XIX (Muntinlupa),3.00,8.00,74.00,8.00,0.100,0.050,0.077
+Apr-25,Stn. XX (GEMS),2.00,6.00,157.00,8.20,0.060,0.050,0.048
+Apr-25,Stn. XXI (Cardona),3.00,7.00,18.00,8.60,0.030,0.050,0.038
+Apr-25,Stn. XXII (Jala-jala),2.00,8.00,18.00,7.60,0.050,0.200,0.075
+Apr-25,Stn. XXIII (Lumban),2.00,7.00,109.00,8.30,0.040,0.050,0.037
+Apr-25,Stn. XXIV (Cardona North Central Bay),4.00,7.00,34.00,8.30,0.040,0.050,0.037
+May-25,Stn. I (Central West Bay),4.00,6.00,19.00,8.30,0.090,0.050,0.100
+May-25,Stn. II (East Bay),5.00,8.00,19.00,8.80,0.080,0.050,0.053
+May-25,Stn. IV (Central Bay),5.00,7.00,18.00,8.50,0.080,0.050,0.061
+May-25,Stn. V (Northern West Bay),6.00,7.00,33.00,8.50,0.100,0.050,0.140
+May-25,Stn. VIII (South Bay),5.00,7.00,29.00,8.80,0.060,0.050,0.059
+May-25,Stn. XIII (Taytay),6.00,7.00,56.00,8.70,0.100,0.050,0.170
+May-25,Stn. XV (San Pedro),3.00,5.00,77.00,8.00,0.400,0.050,0.150
+May-25,Stn. XVI (Sta. Rosa),4.00,8.00,57.00,8.90,0.070,0.050,0.067
+May-25,Stn. XVII (Sanctuary),4.00,8.00,18.00,9.50,0.070,0.050,0.045
+May-25,Stn. XVIII (Pagsanjan),6.00,10.00,25.00,8.40,0.040,0.050,0.014
+May-25,Stn. XIX (Muntinlupa),4.00,8.00,62.00,8.10,0.080,0.050,0.150
+May-25,Stn. XX (GEMS),4.00,5.00,190.00,8.50,0.070,0.050,0.052
+May-25,Stn. XXI (Cardona),5.00,5.00,35.00,8.80,0.070,0.050,0.056
+May-25,Stn. XXII (Jala-jala),5.00,8.00,18.00,8.70,0.080,0.050,0.050
+May-25,Stn. XXIII (Lumban),4.00,10.00,126.00,8.70,0.070,0.050,0.070
+May-25,Stn. XXIV (Cardona North Central Bay),4.00,6.00,26.00,8.70,0.070,0.050,0.070
+Jun-25,Stn. I (Central West Bay),7.00,6.00,30.00,8.00,0.200,0.050,0.140
+Jun-25,Stn. II (East Bay),7.00,9.00,25.00,8.90,0.060,0.050,0.050
+Jun-25,Stn. IV (Central Bay),5.00,7.00,19.00,8.40,0.050,0.050,0.065
+Jun-25,Stn. V (Northern West Bay),6.00,7.00,33.00,8.40,0.090,0.050,0.160
+Jun-25,Stn. VIII (South Bay),5.00,9.00,46.00,8.90,0.090,0.050,0.250
+Jun-25,Stn. XIII (Taytay),5.00,8.00,115.00,8.60,0.200,0.050,0.420
+Jun-25,Stn. XV (San Pedro),5.00,6.00,258.00,8.30,0.100,0.050,0.210
+Jun-25,Stn. XVI (Sta. Rosa),5.00,7.00,68.00,8.10,0.050,0.050,0.100
+Jun-25,Stn. XVII (Sanctuary),5.00,6.00,28.00,8.90,0.060,0.050,0.150
+Jun-25,Stn. XVIII (Pagsanjan),4.00,9.00,25.00,8.30,0.050,0.050,0.025
+Jun-25,Stn. XIX (Muntinlupa),5.00,6.00,77.00,7.70,0.100,0.050,0.110
+Jun-25,Stn. XX (GEMS),6.00,5.00,187.00,8.70,0.090,0.050,0.083
+Jun-25,Stn. XXI (Cardona),7.00,7.00,47.00,8.70,0.200,0.050,0.064
+Jun-25,Stn. XXII (Jala-jala),5.00,8.00,28.00,7.30,0.100,0.050,0.082
+Jun-25,Stn. XXIII (Lumban),3.00,7.00,217.00,7.90,0.060,0.050,0.074
+Jun-25,Stn. XXIV (Cardona North Central Bay),5.00,6.00,39.00,7.90,0.060,0.050,0.074
+Jul-25,Stn. I (Central West Bay),5.00,7.00,50.00,7.60,0.040,0.050,0.160
+Jul-25,Stn. II (East Bay),4.00,7.00,25.00,9.00,0.030,0.050,0.044
+Jul-25,Stn. IV (Central Bay),3.00,7.00,19.00,8.90,0.100,0.200,0.160
+Jul-25,Stn. V (Northern West Bay),4.00,8.00,45.00,9.00,0.050,0.200,0.170
+Jul-25,Stn. VIII (South Bay),4.00,7.00,46.00,8.80,0.010,0.050,0.046
+Jul-25,Stn. XIII (Taytay),7.00,7.00,393.00,8.90,0.100,0.050,0.220
+Jul-25,Stn. XV (San Pedro),4.00,7.00,918.00,8.80,0.030,0.050,0.100
+Jul-25,Stn. XVI (Sta. Rosa),5.00,8.00,233.00,8.90,0.010,0.050,0.082
+Jul-25,Stn. XVII (Sanctuary),5.00,7.00,28.00,8.80,0.020,0.050,0.033
+Jul-25,Stn. XVIII (Pagsanjan),4.00,8.00,24.00,8.90,0.020,0.050,0.021
+Jul-25,Stn. XIX (Muntinlupa),4.00,8.00,88.00,9.00,0.010,0.050,0.140
+Jul-25,Stn. XX (GEMS),4.00,5.00,256.00,9.10,0.020,0.050,0.110
+Jul-25,Stn. XXI (Cardona),5.00,6.00,47.00,8.80,0.040,0.100,0.054
+Jul-25,Stn. XXII (Jala-jala),4.00,7.00,28.00,8.90,0.003,0.400,0.057
+Jul-25,Stn. XXIII (Lumban),3.00,6.00,92.00,9.00,0.100,0.100,0.077
+Jul-25,Stn. XXIV (Cardona North Central Bay),6.00,7.00,29.00,9.10,0.030,0.100,0.100
+Aug-25,Stn. I (Central West Bay),2.00,6.00,65.00,7.90,0.100,1.000,0.200
+Aug-25,Stn. II (East Bay),3.00,8.00,33.00,8.40,0.070,0.500,0.130
+Aug-25,Stn. IV (Central Bay),3.00,8.00,19.00,8.30,0.100,0.800,0.170
+Aug-25,Stn. V (Northern West Bay),3.00,7.00,45.00,8.10,0.100,1.000,0.200
+Aug-25,Stn. VIII (South Bay),4.00,9.00,28.00,8.80,0.050,0.400,0.130
+Aug-25,Stn. XIII (Taytay),2.00,6.00,292.00,7.50,0.080,1.000,0.180
+Aug-25,Stn. XV (San Pedro),4.00,7.00,1675.00,7.80,0.050,1.000,0.230
+Aug-25,Stn. XVI (Sta. Rosa),3.00,7.00,504.00,7.90,0.200,0.600,0.190
+Aug-25,Stn. XVII (Sanctuary),2.00,7.00,38.00,7.90,0.070,0.700,0.150
+Aug-25,Stn. XVIII (Pagsanjan),3.00,9.00,24.00,8.30,0.050,0.600,0.140
+Aug-25,Stn. XIX (Muntinlupa),2.00,7.00,105.00,8.10,0.050,0.700,0.170
+Aug-25,Stn. XX (GEMS),4.00,7.00,252.00,8.00,0.100,1.000,0.170
+Aug-25,Stn. XXI (Cardona),4.00,8.00,47.00,8.20,0.090,0.700,0.150
+Aug-25,Stn. XXII (Jala-jala),3.00,8.00,38.00,8.20,0.090,0.600,0.150
+Aug-25,Stn. XXIII (Lumban),3.00,7.00,44.00,7.80,0.050,0.400,0.120
+Aug-25,Stn. XXIV (Cardona North Central Bay),3.00,7.00,46.00,7.80,0.100,1.000,0.170
+Sep-25,Stn. I (Central West Bay),3.00,6.00,84.00,8.10,0.040,0.900,0.200
+Sep-25,Stn. II (East Bay),2.00,8.00,24.00,8.10,0.001,0.300,0.070
+Sep-25,Stn. IV (Central Bay),3.00,7.00,19.00,8.20,0.030,1.000,0.190
+Sep-25,Stn. V (Northern West Bay),3.00,7.00,45.00,8.10,0.020,0.800,0.200
+Sep-25,Stn. VIII (South Bay),2.00,6.00,19.00,7.60,0.001,0.700,0.170
+Sep-25,Stn. XIII (Taytay),3.00,7.00,140.00,8.00,0.020,0.800,0.200
+Sep-25,Stn. XV (San Pedro),4.00,4.00,1978.00,7.60,0.020,1.000,0.260
+Sep-25,Stn. XVI (Sta. Rosa),3.00,6.00,306.00,8.10,0.020,0.900,0.190
+Sep-25,Stn. XVII (Sanctuary),2.00,6.00,24.00,7.60,0.010,1.000,0.180
+Sep-25,Stn. XVIII (Pagsanjan),3.00,8.00,18.00,8.30,0.001,0.050,0.012
+Sep-25,Stn. XIX (Muntinlupa),3.00,6.00,84.00,8.00,0.020,0.700,0.170
+Sep-25,Stn. XX (GEMS),2.00,6.00,370.00,7.90,0.030,1.000,0.220
+Sep-25,Stn. XXI (Cardona),2.00,6.00,36.00,8.00,0.010,1.000,0.200
+Sep-25,Stn. XXII (Jala-jala),0.50,7.00,24.00,7.60,0.001,0.900,0.180
+Sep-25,Stn. XXIII (Lumban),4.00,8.00,30.00,7.20,0.001,0.050,0.053
+Sep-25,Stn. XXIV (Cardona North Central Bay),1.00,7.00,77.00,8.20,0.020,1.000,0.200
+Oct-25,Stn. I (Central West Bay),2.00,7.00,52.00,,0.100,1.000,0.220
+Oct-25,Stn. II (East Bay),3.00,7.00,25.00,8.00,0.050,1.000,0.130
+Oct-25,Stn. IV (Central Bay),1.00,7.00,30.00,,0.090,0.700,0.200
+Oct-25,Stn. V (Northern West Bay),2.00,7.00,61.00,8.00,0.080,1.000,0.220
+Oct-25,Stn. VIII (South Bay),2.00,7.00,30.00,7.90,0.030,1.000,0.150
+Oct-25,Stn. XIII (Taytay),3.00,6.00,105.00,7.70,0.090,0.800,0.280
+Oct-25,Stn. XV (San Pedro),2.00,6.00,900.00,7.00,0.040,1.000,0.200
+Oct-25,Stn. XVI (Sta. Rosa),3.00,6.00,349.00,7.50,0.040,1.000,0.180
+Oct-25,Stn. XVII (Sanctuary),2.00,7.00,24.00,,0.060,1.000,0.180
+Oct-25,Stn. XVIII (Pagsanjan),2.00,6.00,18.00,7.60,0.030,0.400,0.052
+Oct-25,Stn. XIX (Muntinlupa),3.00,8.00,88.00,8.00,0.040,1.000,0.210
+Oct-25,Stn. XX (GEMS),3.00,7.00,229.00,,0.100,1.000,0.230
+Oct-25,Stn. XXI (Cardona),2.00,7.00,37.00,,0.060,1.000,0.210
+Oct-25,Stn. XXII (Jala-jala),2.00,7.00,25.00,7.80,0.050,1.000,0.170
+Oct-25,Stn. XXIII (Lumban),2.00,8.00,29.00,7.10,0.090,0.300,0.066
+Oct-25,Stn. XXIV (Cardona North Central Bay),2.00,7.00,150.00,,0.080,1.000,0.210
+Nov-25,Stn. I (Central West Bay),2.00,7.00,39.00,,0.100,0.800,0.230
+Nov-25,Stn. II (East Bay),2.00,8.00,19.00,,0.070,1.000,0.070
+Nov-25,Stn. IV (Central Bay),1.00,7.00,30.00,,0.080,0.800,0.240
+Nov-25,Stn. V (Northern West Bay),0.50,6.00,46.00,7.80,0.100,0.800,0.230
+Nov-25,Stn. VIII (South Bay),0.50,7.00,30.00,,0.100,0.700,0.190
+Nov-25,Stn. XIII (Taytay),1.00,6.00,77.00,7.90,0.100,0.800,0.240
+Nov-25,Stn. XV (San Pedro),1.00,7.00,416.00,7.50,0.100,0.800,0.220
+Nov-25,Stn. XVI (Sta. Rosa),0.50,7.00,191.00,7.60,0.100,0.800,0.210
+Nov-25,Stn. XVII (Sanctuary),2.00,7.00,18.00,,0.100,0.800,0.240
+Nov-25,Stn. XVIII (Pagsanjan),0.50,7.00,41.00,,0.100,0.060,0.044
+Nov-25,Stn. XIX (Muntinlupa),2.00,8.00,97.00,7.90,0.100,0.800,0.220
+Nov-25,Stn. XX (GEMS),1.00,6.00,192.00,,0.100,0.800,0.240
+Nov-25,Stn. XXI (Cardona),0.50,7.00,20.00,,0.100,0.800,0.250
+Nov-25,Stn. XXII (Jala-jala),1.00,7.00,34.00,,0.080,0.900,0.230
+Nov-25,Stn. XXIII (Lumban),1.00,6.00,30.00,,0.200,0.200,0.071
+Nov-25,Stn. XXIV (Cardona North Central Bay),0.50,7.00,177.00,,0.200,0.800,0.240
+Dec-25,Stn. I (Central West Bay),2.00,8.00,19.00,8.00,0.090,0.600,0.210
+Dec-25,Stn. II (East Bay),2.00,8.00,19.00,8.20,0.070,0.300,0.110
+Dec-25,Stn. IV (Central Bay),2.00,8.00,68.00,8.30,0.080,0.700,0.250
+Dec-25,Stn. V (Northern West Bay),2.00,7.00,53.00,8.60,0.090,0.600,0.230
+Dec-25,Stn. VIII (South Bay),1.00,8.00,57.00,7.30,0.070,0.600,0.200
+Dec-25,Stn. XIII (Taytay),2.00,7.00,77.00,8.40,0.080,0.700,0.230
+Dec-25,Stn. XV (San Pedro),4.00,7.00,322.00,8.60,0.070,0.700,0.220
+Dec-25,Stn. XVI (Sta. Rosa),2.00,7.00,535.00,8.30,0.200,0.600,0.240
+Dec-25,Stn. XVII (Sanctuary),2.00,8.00,28.00,8.20,0.080,0.600,0.250
+Dec-25,Stn. XVIII (Pagsanjan),2.00,8.00,41.00,6.80,0.060,0.300,0.071
+Dec-25,Stn. XIX (Muntinlupa),2.00,8.00,120.00,8.80,0.070,0.500,0.180
+Dec-25,Stn. XX (GEMS),2.00,7.00,150.00,8.00,0.090,0.700,0.240
+Dec-25,Stn. XXI (Cardona),3.00,9.00,19.00,8.50,0.080,0.700,0.250
+Dec-25,Stn. XXII (Jala-jala),2.00,8.00,66.00,8.20,0.100,0.500,0.190
+Dec-25,Stn. XXIII (Lumban),1.00,7.00,19.00,7.30,0.060,0.400,0.054
+Dec-25,Stn. XXIV (Cardona North Central Bay),2.00,8.00,110.00,8.10,0.100,0.800,0.260
