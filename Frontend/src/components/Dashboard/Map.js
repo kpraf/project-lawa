@@ -80,7 +80,7 @@ L.Icon.Default.mergeOptions({
 const PARAM_GUIDELINES = {
   'Dissolved Oxygen': { type: 'min', value: 5 }, // mg/L, minimum
   'pH': { type: 'range', min: 6.5, max: 8.5 },   // acceptable range
-  'Temperature': { type: 'max', value: 32 },     // Â°C, maximum
+  'Temperature': { type: 'max', value: 32 },     // °C, maximum
   'ORP': { type: 'min', value: 200 },            // mV, minimum (example)
   'Turbidity': { type: 'max', value: 25 },       // NTU, maximum (example)
   'TDS': { type: 'max', value: 1000 },           // mg/L, maximum (example)
@@ -215,7 +215,7 @@ function generateTooltipContent(stationName, stationLetter, parameters, wqi, ove
   );
 
   const hasExceedances = dangerousParams.length > 0;
-  const statusIcon = hasExceedances ? 'âš ï¸' : measuredParams.length > 0 ? 'âœ…' : 'â„¹ï¸';
+  const statusIcon = hasExceedances ? '⚠️' : measuredParams.length > 0 ? '✅' : 'ℹ️';
   const statusClass = hasExceedances ? 'status-warning' : measuredParams.length > 0 ? 'status-good' : 'status-info';
   
   const statusText = hasExceedances 
@@ -240,18 +240,20 @@ const polygonData = allStationNames.map((stationName, index) => ({
 
 // No more disabled polygons - all stations are now active
 
-function Map({ onMarkerSelect, selectedMarker }) {
-  const [stationData, setStationData] = useState({});
+function Map({ onMarkerSelect, selectedMarker, stationSummaries }) {
+  const [fetchedStationData, setStationData] = useState({});
+  const stationData = stationSummaries || fetchedStationData;
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Fetch latest data for all stations
+  // Fetch latest data for all stations unless the parent supplies per-station summaries
   useEffect(() => {
+    if (stationSummaries !== undefined) return;
     async function fetchAllStations() {
       const data = {};
       for (const polygon of polygonData) {
         try {
-          const res = await fetch(`process.env.REACT_APP_API_URL/sensors/recent-data/${polygon.station}`);
+          const res = await fetch(`${process.env.REACT_APP_API_URL}/sensors/recent-data/${polygon.station}`);
           const json = await res.json();
           data[polygon.station] = json;
         } catch (e) {

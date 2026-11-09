@@ -5,7 +5,7 @@ import LineGraph from '../../linegraph-dashboard/components/LineGraph';
 import WQI_linechart from './WQI_linechart';
 
 import Dropdown from './Dropdown';
-import { fetchAllData, fetchDateMetadata, fetchAllDataWithForecast } from './helpers';
+import { fetchDateMetadata, fetchAllDataWithForecast, toLocalYMD } from './helpers';
 import { getGrade } from './paramgrade';
 
 const Chip = ({ label, selected, onClick, disabled }) => (
@@ -23,13 +23,15 @@ const Chip = ({ label, selected, onClick, disabled }) => (
   </button>
 );
 
+// Dates are handled in local time; toISOString() would shift them a day back in UTC+8.
 function formatDate(date) {
   if (!date) return '';
-  return date.toISOString().slice(0, 10);
+  return toLocalYMD(date);
 }
 function parseDate(str) {
   if (!str) return null;
-  return new Date(str);
+  const [y, m, d] = str.split('-').map(Number);
+  return new Date(y, m - 1, d);
 }
 function formatRangeLabel(start, end, status) {
   // If a quick range is selected, show its label
@@ -210,12 +212,8 @@ const LineGraphControls = ({
 }) => {
   const [allData, setAllData] = useState(initialAllData);
   const [selectedParams, setSelectedParams] = useState(initialParameter ? [initialParameter] : ['all']);
-  // Set default date range - use "All Time" when coming from dashboard, otherwise "Today"
-  const today = getToday();
-  const initialDateRange = fromDashboard 
-    ? { start: null, end: null, label: 'All Time' }
-    : { start: today, end: today, label: 'Today' };
-  const [dateRange, setDateRange] = useState(initialDateRange);
+  const [dateRange, setDateRange] = useState({ start: null, end: null, label: 'All Time' });
+  const latestRequestRef = useRef(0);
   const [datePopoverOpen, setDatePopoverOpen] = useState(false);
   const datePopoverRef = useRef(null);
 
@@ -264,8 +262,10 @@ const LineGraphControls = ({
       }
     }
     if (!validDateRange) {
+      latestRequestRef.current++;
       setValidationMsg('Invalid date range selected.');
       setAllData({ Parameters: {}, metadata: {} });
+      setLoading(false);
       return;
     }
     // Build params for fetchAllData
@@ -292,24 +292,18 @@ const LineGraphControls = ({
       params.endDate = '';
     }
 
-    // Log the params and a sample URL for debugging
-    const query = new URLSearchParams();
-    if (params.station && params.station.length) query.append('station', params.station.join(','));
-    if (params.status) query.append('status', params.status);
-    if (params.startDate) query.append('startDate', params.startDate);
-    if (params.endDate) query.append('endDate', params.endDate);
-    const url = `/api/data?${query.toString()}`;
-    console.log('Fetching data with params:', params, 'URL:', url, 'Forecast mode:', forecastMode);
-
     setLoading(true);
-    // Use enhanced fetch function that supports forecast mode
     const enhancedParams = {
       ...params,
       selectedParams,
       forecastMode
     };
-    
+
+    // Only the most recent request may update the charts; an older one finishing late
+    // (e.g. a historical load after switching to Forecast) must not overwrite them.
+    const requestId = ++latestRequestRef.current;
     fetchAllDataWithForecast((data) => {
+      if (requestId !== latestRequestRef.current) return;
       setAllData(data);
       setLoading(false);
     }, enhancedParams);
@@ -444,60 +438,28 @@ const LineGraphControls = ({
     [dateMeta]
   );
 
-  // Set default date range based on context and metadata (only once)
-  const dateRangeInitializedRef = useRef(false);
-  useEffect(() => {
-    if (!dateMeta || dateRangeInitializedRef.current) return;
-    
-    if (fromDashboard) {
-      // When coming from dashboard, default to All Time
-      setDateRange({ start: null, end: null, label: 'All Time' });
-    } else {
-      // Otherwise, default to Today if available
-      const qr = QUICK_RANGES.find(q => q.label === 'Today');
-      if (qr) {
-        const { start, end } = qr.get();
-        setDateRange({ start, end, label: 'Today' });
-      }
-    }
-    dateRangeInitializedRef.current = true;
-  }, [dateMeta, fromDashboard]);
-
   // Adjust date range when switching between historical and forecast modes
   useEffect(() => {
     if (forecastMode) {
-      // For forecast mode, default to next 6 months
-      const today = getToday();
-      const futureDate = new Date(today);
-      futureDate.setMonth(futureDate.getMonth() + 6);
-      setDateRange({ 
-        start: today, 
-        end: futureDate, 
-        label: 'Next 6 Months' 
-      });
+      const { start, end } = getNextNMonths(6);
+      setDateRange({ start, end, label: 'Next 6 Months' });
     } else {
-      // For historical mode, respect fromDashboard setting
-      if (fromDashboard) {
-        setDateRange({ 
-          start: null, 
-          end: null, 
-          label: 'All Time' 
-        });
-      } else {
-        // Default to today for normal navigation
-        const today = getToday();
-        setDateRange({ 
-          start: today, 
-          end: today, 
-          label: 'Today' 
-        });
-      }
+      setDateRange({ start: null, end: null, label: 'All Time' });
     }
-  }, [forecastMode, fromDashboard]);
+  }, [forecastMode]);
 
-  // Clamp a date to available range
+  // Year shortcuts for historical mode, newest first
+  const yearRanges = useMemo(() => (
+    [...years].map(Number).sort((a, b) => b - a).map(y => ({
+      label: String(y),
+      get: () => ({ start: new Date(y, 0, 1), end: new Date(y, 11, 31) })
+    }))
+  ), [years]);
+
+  // Clamp a date to the available historical range (forecast dates are not limited)
   function clampDateToAvailable(date) {
     if (!date) return null;
+    if (forecastMode) return date;
     if (minAvailableDate && date < minAvailableDate) return minAvailableDate;
     if (maxAvailableDate && date > maxAvailableDate) return maxAvailableDate;
     return date;
@@ -537,6 +499,11 @@ const LineGraphControls = ({
   const dashboardDataByParameter = useMemo(() => {
     return transformParametersToDashboardFormat(filteredData.Parameters, selectedStations);
   }, [filteredData.Parameters, selectedStations]);
+
+  const visibleParams = (selectedParams.includes('all')
+    ? parameterOptions.map(opt => opt.value)
+    : selectedParams
+  ).filter(param => (dashboardDataByParameter[param] || []).length > 0);
 
   // UI
   return (
@@ -712,7 +679,7 @@ const LineGraphControls = ({
                   {(forecastMode ? FORECAST_QUICK_RANGES : QUICK_RANGES).map(qr => {
                     const { start, end } = qr.get();
                     const isAllTime = qr.label === 'All Time';
-                    const isDisabled = !isAllTime && (
+                    const isDisabled = !forecastMode && !isAllTime && (
                       (minAvailableDate && end && end < minAvailableDate) ||
                       (maxAvailableDate && start && start > maxAvailableDate)
                     );
@@ -734,6 +701,28 @@ const LineGraphControls = ({
                       </button>
                     );
                   })}
+                  {!forecastMode && yearRanges.length > 0 && (
+                    <>
+                      <div className="border-t my-2" />
+                      <label className="text-xs text-gray-500 font-semibold">Year</label>
+                      <div className="flex flex-wrap gap-1">
+                        {yearRanges.map(qr => (
+                          <button
+                            key={qr.label}
+                            className={`px-2.5 py-1 rounded-md border text-xs font-medium transition ${
+                              dateRange.label === qr.label
+                                ? 'bg-blue-600 text-white border-blue-700'
+                                : 'bg-white text-blue-800 border-blue-200 hover:bg-blue-50'
+                            }`}
+                            onClick={() => handleQuickRange(qr)}
+                            type="button"
+                          >
+                            {qr.label}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
                   <div className="border-t my-2" />
                   <div className="flex flex-col gap-2">
                     <label className="text-xs text-gray-500 font-semibold">Custom Range</label>
@@ -741,8 +730,8 @@ const LineGraphControls = ({
                       <input
                         type="date"
                         value={dateRange.start ? formatDate(dateRange.start) : ''}
-                        min={minAvailableDate ? formatDate(minAvailableDate) : undefined}
-                        max={maxAvailableDate ? formatDate(maxAvailableDate) : undefined}
+                        min={!forecastMode && minAvailableDate ? formatDate(minAvailableDate) : undefined}
+                        max={!forecastMode && maxAvailableDate ? formatDate(maxAvailableDate) : undefined}
                         onChange={e => handleCustomDateRange(r => ({ ...r, start: parseDate(e.target.value) }))}
                         className="border rounded px-2 py-1 focus:ring-2 focus:ring-blue-400 text-xs transition-all duration-200"
                         style={{ fontSize: 12, width: '130px' }}
@@ -752,8 +741,8 @@ const LineGraphControls = ({
                       <input
                         type="date"
                         value={dateRange.end ? formatDate(dateRange.end) : ''}
-                        min={minAvailableDate ? formatDate(minAvailableDate) : undefined}
-                        max={maxAvailableDate ? formatDate(maxAvailableDate) : undefined}
+                        min={!forecastMode && minAvailableDate ? formatDate(minAvailableDate) : undefined}
+                        max={!forecastMode && maxAvailableDate ? formatDate(maxAvailableDate) : undefined}
                         onChange={e => handleCustomDateRange(r => ({ ...r, end: parseDate(e.target.value) }))}
                         className="border rounded px-2 py-1 focus:ring-2 focus:ring-blue-400 text-xs transition-all duration-200"
                         style={{ fontSize: 12, width: '130px' }}
@@ -782,13 +771,29 @@ const LineGraphControls = ({
         </div>
       </div>
 
+      {visibleParams.length === 0 && (
+        <div className="w-full flex flex-col items-center justify-center min-h-[260px] bg-white rounded-lg shadow p-6 text-center">
+          {loading ? (
+            <>
+              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-700 mb-4"></div>
+              <p className="text-blue-800 font-semibold">Loading data...</p>
+            </>
+          ) : (
+            <>
+              <p className="text-gray-700 text-lg font-semibold mb-1">
+                No {forecastMode ? 'forecast' : 'monitoring'} data for {formatRangeLabel(dateRange.start, dateRange.end, dateRange.label)}.
+              </p>
+              {!forecastMode && years.length > 0 && (
+                <p className="text-gray-500 text-sm">
+                  Data is available for: {[...years].map(Number).sort((a, b) => a - b).join(', ')}. Pick a year from the Date Range menu.
+                </p>
+              )}
+            </>
+          )}
+        </div>
+      )}
       {/* Overall CCME WQI Line Chart (All Parameters) - Only show when 4+ parameters selected */}
-      {(() => {
-        const actualSelectedParams = selectedParams.includes('all') 
-          ? parameterOptions.map(opt => opt.value)
-          : selectedParams;
-        return actualSelectedParams.length >= 4;
-      })() && (
+      {visibleParams.length >= 4 && (
         <WQI_linechart dashboardDataByParameter={dashboardDataByParameter} selectedStations={selectedStations} />
       )}
       {/* Use a fixed 2-column grid for the graphs */}
@@ -798,10 +803,7 @@ const LineGraphControls = ({
         }
         style={{ alignItems: 'stretch' }}
       >
-        {(selectedParams.includes('all')
-          ? parameterOptions.map(opt => opt.value)
-          : selectedParams
-        ).map(param => {
+        {visibleParams.map(param => {
           // Use dashboardDataByParameter for the new LineGraph
           const paramData = dashboardDataByParameter[param] || [];
           return (

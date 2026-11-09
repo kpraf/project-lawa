@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Navbar from '../components/navbar';
-import Tab from '../components/AnalyticsTab';
 import LineGraphControls from '../components/Dashboard/LineGraphControls';
 import { fetchAllData } from '../components/Dashboard/helpers';
 import Footer from '../components/Footer'

@@ -26,7 +26,7 @@ const ProtectedRoute = ({children}) => {
         return <Navigate to="/" />;
       }
       
-      const response = await fetch('process.env.REACT_APP_API_URL/auth/verify/', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/verify/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const ProtectedRoute = ({children}) => {
         return <Navigate to="/" />;
       }
 
-      const refreshResponse = await fetch('process.env.REACT_APP_API_URL/auth/token/refresh/', {
+      const refreshResponse = await fetch(`${process.env.REACT_APP_API_URL}/auth/token/refresh/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

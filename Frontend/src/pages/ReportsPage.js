@@ -9,10 +9,9 @@ const ReportsPage = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await fetch('process.env.REACT_APP_API_URL/reports/list/');
+        const response = await fetch('/data/reports.json');
         const data = await response.json();
         setReports(data.reports);
-        console.log(reports);
       } catch (error) {
         // console.error('Error fetching reports:', error);
       } finally {

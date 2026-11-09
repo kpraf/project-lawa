@@ -8,7 +8,7 @@ import HoverModal from '../hoverModal';
 const PARAM_GUIDELINES = {
   'Dissolved Oxygen': { type: 'min', value: 5 }, // mg/L, minimum
   'pH': { type: 'range', min: 6.5, max: 8.5 },   // acceptable range
-  'Temperature': { type: 'max', value: 32 },     // Â°C, maximum
+  'Temperature': { type: 'max', value: 32 },     // °C, maximum
   'ORP': { type: 'min', value: 200 },            // mV, minimum
   'Turbidity': { type: 'max', value: 25 },       // NTU, maximum
   'TDS': { type: 'max', value: 1000 },           // mg/L, maximum
@@ -32,11 +32,11 @@ function isExceedance(param, value) {
 
 const parameterRanges = {
   Temperature: {
-    AA: ["Â°C", "26 - 30"],
-    A: ["Â°C", "26 - 30"],
-    B: ["Â°C", "26 - 30"],
-    C: ["Â°C", "25 - 31"],
-    D: ["Â°C", "25 - 32"]
+    AA: ["°C", "26 - 30"],
+    A: ["°C", "26 - 30"],
+    B: ["°C", "26 - 30"],
+    C: ["°C", "25 - 31"],
+    D: ["°C", "25 - 32"]
   },
   pH: {
     AA: ["", "6.5 - 8.5"],
@@ -46,10 +46,10 @@ const parameterRanges = {
     D: ["", "6.0 - 9.0"]
   },
   'Dissolved Oxygen': {
-    AA: ["mg/L", "â‰¥5"],
-    A: ["mg/L", "â‰¥5"],
-    B: ["mg/L", "â‰¥5"],
-    C: ["mg/L", "â‰¥5"],
+    AA: ["mg/L", "≥5"],
+    A: ["mg/L", "≥5"],
+    B: ["mg/L", "≥5"],
+    C: ["mg/L", "≥5"],
     D: ["mg/L", "2 - 4"]
   },
   'Total Dissolved Solids': {
@@ -74,38 +74,38 @@ const parameterRanges = {
     D: ["mV", "150 - 200"]
   },
   BOD: {
-    AA: ["mg/L", "â‰¤1"],
-    A: ["mg/L", "â‰¤3"],
-    B: ["mg/L", "â‰¤5"],
-    C: ["mg/L", "â‰¤7"],
+    AA: ["mg/L", "≤1"],
+    A: ["mg/L", "≤3"],
+    B: ["mg/L", "≤5"],
+    C: ["mg/L", "≤7"],
     D: ["mg/L", ">7"]
   },
   'Fecal Coliform': {
     AA: ["CFU/100mL", "<1.1"],
-    A: ["CFU/100mL", "â‰¤100"],
-    B: ["CFU/100mL", "â‰¤200"],
-    C: ["CFU/100mL", "â‰¤400"],
+    A: ["CFU/100mL", "≤100"],
+    B: ["CFU/100mL", "≤200"],
+    C: ["CFU/100mL", "≤400"],
     D: ["CFU/100mL", ">400"]
   },
   'Inorganic Phosphate': {
     AA: ["mg/L", "<0.003"],
-    A: ["mg/L", "â‰¤0.05"],
-    B: ["mg/L", "â‰¤0.1"],
-    C: ["mg/L", "â‰¤0.5"],
+    A: ["mg/L", "≤0.05"],
+    B: ["mg/L", "≤0.1"],
+    C: ["mg/L", "≤0.5"],
     D: ["mg/L", ">0.5"]
   },
   Nitrate: {
-    AA: ["mg/L", "â‰¤1"],
-    A: ["mg/L", "â‰¤3"],
-    B: ["mg/L", "â‰¤6"],
-    C: ["mg/L", "â‰¤10"],
+    AA: ["mg/L", "≤1"],
+    A: ["mg/L", "≤3"],
+    B: ["mg/L", "≤6"],
+    C: ["mg/L", "≤10"],
     D: ["mg/L", ">10"]
   },
   Ammonia: {
-    AA: ["mg/L", "â‰¤0.02"],
-    A: ["mg/L", "â‰¤0.05"],
-    B: ["mg/L", "â‰¤0.1"],
-    C: ["mg/L", "â‰¤0.5"],
+    AA: ["mg/L", "≤0.02"],
+    A: ["mg/L", "≤0.05"],
+    B: ["mg/L", "≤0.1"],
+    C: ["mg/L", "≤0.5"],
     D: ["mg/L", ">0.5"]
   }
 };
@@ -132,7 +132,7 @@ const parameterUnits = {
   'Inorganic Phosphate': 'mg/L',
   'Dissolved Oxygen': 'mg/L',
   Nitrate: 'mg/L',
-  Temperature: 'Â°C',
+  Temperature: '°C',
   Ammonia: 'mg/L',
   Turbidity: 'NTU',
   'Total Dissolved Solids': 'mg/L',
@@ -187,7 +187,7 @@ const SquaresContainer = ({ selectedMarker, selectedStation, className, waterDat
     if (selectedMarker) {
       setLoading(true);
       try {
-        const response = await fetch(`process.env.REACT_APP_API_URL/sensors/recent-data/${selectedMarker.station}`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/sensors/recent-data/${selectedMarker.station}`);
         const data = await response.json();
         setWaterData(data);
       } catch (error) {

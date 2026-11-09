@@ -21,7 +21,7 @@ function Dashboard() {
 
   const getLatestTime = useCallback(async () => {
     const response = await fetch(
-      `process.env.REACT_APP_API_URL/sensors/recent-data`
+      `${process.env.REACT_APP_API_URL}/sensors/recent-data`
     );
     const data = await response.json();
     const dataArray = Array.isArray(data) ? data : [data];

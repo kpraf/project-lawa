@@ -17,14 +17,14 @@ const AdminReports = (props) => {
   const [availableParameters, setAvailableParameters] = useState([]);
   const [availableStations, setAvailableStations] = useState([]);
   const [allData, setAllData] = useState(null);
-  const api = 'process.env.REACT_APP_API_URL/sensors/download-csv/';
+  const api = `${process.env.REACT_APP_API_URL}/sensors/download-csv/`;
 
   const user = props.user;
   const email = props.email;
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await fetch('process.env.REACT_APP_API_URL/reports/list/');
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/reports/list/`);
         const data = await response.json();
         setReports(data.reports);
         console.log(reports);

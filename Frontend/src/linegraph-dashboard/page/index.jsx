@@ -6,7 +6,7 @@ import Sidebar from '../../components/sidebar';
 import { DANGER_LEVELS } from '../utils/constants';
 import { useSearchParams } from 'react-router-dom';
 
-const API_BASE_URL = 'process.env.REACT_APP_API_URL';
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const LineGraphDashboard = ({ showSidebar = false, userProps = null, emailProps = null }) => {
   const [searchParams] = useSearchParams();

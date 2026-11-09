@@ -1,5 +1,4 @@
 import os
-os.add_dll_directory(r'C:\Program Files\GTK3-Runtime Win64\bin')
 from pathlib import Path
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string

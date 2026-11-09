@@ -2,20 +2,15 @@ import { useEffect, useState, useMemo } from 'react';
 import Map from './Dashboard/Map';
 import SquaresContainer from './Dashboard/S_Container';
 import OverallWaterQuality from './Dashboard/OverallWaterQuality';
-import { fetchWaterData, fetchAllData } from './Dashboard/helpers';
-import RT_Report from './Dashboard/RT_Report';
-import Weather from './Dashboard/Weather';
-import MapDetails from './Dashboard/MapDetails';
-import HoverModal from './hoverModal';
+import { loadHistorical, getAvailableYears, getStationYearSummary } from './Dashboard/helpers';
 import GradeDescription from './Dashboard/GradeDescription';
-import { FaUsers } from 'react-icons/fa'; // Add this import for the icon
 
 function Dashboard() {
   // State for selected marker/station
   const [selectedMarker, setSelectedMarker] = useState({ station: "I" });
-  const [waterData, setWaterData] = useState(null);
-  const [allData, setAllData] = useState(null);
-  const [selectedParam, setSelectedParam] = useState('all');
+  const [historical, setHistorical] = useState(null);
+  const [years, setYears] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(null);
   const [selectedStation, setSelectedStation] = useState('');
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
@@ -24,11 +19,27 @@ function Dashboard() {
     window.location.reload();
   }
 
-  // Fetch water data and all data when marker changes
   useEffect(() => {
-    fetchWaterData(selectedMarker, setWaterData);
-    fetchAllData(setAllData);
-  }, [selectedMarker]);
+    loadHistorical()
+      .then(data => {
+        const available = getAvailableYears(data);
+        setHistorical(data);
+        setYears(available);
+        setSelectedYear(available[0] ?? null);
+      })
+      .catch(err => console.error('Error loading historical data:', err));
+  }, []);
+
+  const waterData = useMemo(() => {
+    if (!historical || !selectedYear || !selectedMarker) return null;
+    return getStationYearSummary(historical, selectedMarker.station, selectedYear);
+  }, [historical, selectedYear, selectedMarker]);
+
+  const stationSummaries = useMemo(() => {
+    if (!historical || !selectedYear) return null;
+    const stations = [...new Set(historical.series.map(s => s.station))];
+    return Object.fromEntries(stations.map(code => [code, getStationYearSummary(historical, code, selectedYear)]));
+  }, [historical, selectedYear]);
 
   // Set up auto-refresh interval
   useEffect(() => {
@@ -142,6 +153,23 @@ function Dashboard() {
                     ? `Current Station: ${romanToNumber(selectedMarker.station)}`
                     : ""}
                 </span>
+                <span className="flex items-center gap-1 sm:ml-auto">
+                  <label htmlFor="dashboard-year" className="text-xs sm:text-sm font-semibold text-blue-900">
+                    Year
+                  </label>
+                  <select
+                    id="dashboard-year"
+                    value={selectedYear ?? ''}
+                    onChange={e => setSelectedYear(Number(e.target.value))}
+                    disabled={!years.length}
+                    className="border border-blue-300 rounded-md bg-white px-2 py-0.5 text-xs sm:text-sm text-blue-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  >
+                    {years.map(y => (
+                      <option key={y} value={y}>{y}</option>
+                    ))}
+                  </select>
+                  <span className="hidden md:inline text-xs text-blue-700">(annual average)</span>
+                </span>
               </span>
             </div>
             {/* Parameter cards grid: compact layout */}
@@ -224,7 +252,7 @@ function Dashboard() {
                 <GradeDescription />
               </div>
               <div className="w-full flex-shrink-0">
-                <Map onMarkerSelect={setSelectedMarker} waterData={memoizedWaterData} selectedMarker={selectedMarker} />
+                <Map onMarkerSelect={setSelectedMarker} waterData={memoizedWaterData} selectedMarker={selectedMarker} stationSummaries={stationSummaries} />
               </div>
             </div>
           </div>

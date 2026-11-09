@@ -164,7 +164,7 @@ const resolveQuickRange = (label) => {
 export const fetchWaterData = async (selectedMarker, setWaterData) => {
   if (selectedMarker) {
     try {
-      const response = await fetch(`process.env.REACT_APP_API_URL/sensors/recent-data/${selectedMarker.station}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/sensors/recent-data/${selectedMarker.station}`);
       const data = await response.json();
       console.log('fetchWaterData API response:', data); // <-- print API data
       setWaterData(data);
@@ -174,52 +174,84 @@ export const fetchWaterData = async (selectedMarker, setWaterData) => {
   }
 };
 
+// Monitoring data is served as a static file (built by "Data Preprocessing/build_static_dataset.py")
+// because there is no live sensor feed; date filtering happens here instead of in the API.
+let historicalPromise = null;
+export const loadHistorical = () => {
+  if (!historicalPromise) {
+    historicalPromise = fetch('/data/historical.json')
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status} loading historical data`);
+        return r.json();
+      })
+      .catch(err => {
+        historicalPromise = null;
+        throw err;
+      });
+  }
+  return historicalPromise;
+};
+
+export const toLocalYMD = (date) => {
+  const pad = n => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+};
+
+const resolveDateBounds = ({ status, startDate, endDate }) => {
+  if (startDate && endDate) return { from: startDate, to: endDate };
+  if (status && status !== 'All Time' && status !== 'Custom Range') {
+    const { startDate: s, endDate: e } = resolveQuickRange(status);
+    if (s && e) return { from: toLocalYMD(s), to: toLocalYMD(e) };
+  }
+  return { from: null, to: null };
+};
+
+export const getAvailableYears = (historical) =>
+  [...new Set(historical.series.flatMap(s => s.data.map(p => Number(p.time.slice(0, 4)))))].sort((a, b) => b - a);
+
+const geometricMean = values => Math.exp(values.reduce((sum, v) => sum + Math.log(Math.max(v, 1)), 0) / values.length);
+
+// Annual summary per parameter for one station, in the shape the dashboard cards expect.
+// Fecal Coliform uses the geometric mean, as in DENR/LLDA reporting; the rest use the arithmetic mean.
+export const getStationYearSummary = (historical, station, year) => {
+  const Parameters = {};
+  historical.series
+    .filter(s => s.station === station)
+    .forEach(s => {
+      const points = s.data.filter(p => p.value !== null && p.time.startsWith(String(year)));
+      if (!points.length) return;
+      const values = points.map(p => Number(p.value));
+      const mean = s.parameter === 'Fecal Coliform'
+        ? geometricMean(values)
+        : values.reduce((a, b) => a + b, 0) / values.length;
+      const lastTime = points.map(p => p.time).sort().pop();
+      Parameters[s.parameter] = {
+        value: Number(mean.toFixed(3)),
+        time: `${lastTime}T00:00:00`,
+        samples: points.length
+      };
+    });
+  return { Parameters };
+};
+
 export const fetchAllData = async (setAllData, { station = [], status = '', startDate = '', endDate = '' } = {}) => {
   try {
-    // If status is a quick range (not "All Time" or "Custom Range"), use status param only
-    let _status = status, _startDate = startDate, _endDate = endDate;
-    const quickRanges = [
-      'Today', 'Yesterday', 'Last 7 Days', 'Last 30 Days', 'Last 6 Months', 'Last 1 Year', 'Last Year', 'All Time'
-    ];
-    let useStatusOnly = false;
-    if (_status && quickRanges.includes(_status) && _status !== 'All Time' && _status !== 'Custom Range') {
-      useStatusOnly = true;
-      _startDate = '';
-      _endDate = '';
-    }
-    // Build query string
-    const params = [];
-    if (station && Array.isArray(station) && station.length > 0) {
-      station.filter(s => !!s).forEach(s => params.push(`station=${encodeURIComponent(s)}`));
-    }
-    if (!useStatusOnly && _startDate && _endDate) {
-      params.push(`startDate=${encodeURIComponent(_startDate)}`);
-      params.push(`endDate=${encodeURIComponent(_endDate)}`);
-    }
-    // Only add status if present and not using custom date range
-    if (_status && (useStatusOnly || !(_startDate && _endDate))) {
-      params.push(`status=${encodeURIComponent(_status)}`);
-    }
-    const query = params.length ? `?${params.join('&')}` : '';
-    const baseUrl = 'process.env.REACT_APP_API_URL/sensors/get-all-data/';
-    const url = `${baseUrl}${query}`;
+    const historical = await loadHistorical();
+    const { from, to } = resolveDateBounds({ status, startDate, endDate });
+    const stationFilter = (station || []).filter(Boolean);
 
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log('fetchAllData API response:', data); // <-- print API data
+    const data = {
+      metadata: historical.metadata,
+      series: historical.series
+        .filter(s => !stationFilter.length || stationFilter.includes(s.station))
+        .map(s => ({
+          ...s,
+          data: s.data.filter(p => (!from || p.time >= from) && (!to || p.time <= to))
+        }))
+        .filter(s => s.data.length)
+    };
 
-    // Handle "No Data Found" (404 or 200)
-    if (
-      (data && typeof data === 'object' && data.data === "No Data Found") ||
-      !data || typeof data !== 'object' ||
-      (data.series && !Array.isArray(data.series))
-    ) {
-      setAllData({ Parameters: {}, metadata: data.metadata || {} });
-      return;
-    }
-
-    // If series is empty or missing, treat as no data
-    if (!data.series || !data.series.length) {
+    if (!data.series.length) {
       setAllData({ Parameters: {}, metadata: data.metadata || {} });
       return;
     }
@@ -283,10 +315,21 @@ export const fetchAllData = async (setAllData, { station = [], status = '', star
 
 export const fetchDateMetadata = async () => {
   try {
-    // Always fetch with Status=Today by default
-    const response = await fetch('process.env.REACT_APP_API_URL/sensors/getDate/?Status=Today');
-    const data = await response.json();
-    return data;
+    const historical = await loadHistorical();
+    const meta = { year: { data: [] }, month: {}, day: {} };
+    historical.series.forEach(s => s.data.forEach(p => {
+      const [y, m, d] = p.time.slice(0, 10).split('-').map(Number);
+      if (!meta.year.data.includes(y)) meta.year.data.push(y);
+      if (!meta.month[y]) meta.month[y] = [];
+      if (!meta.month[y].includes(m)) meta.month[y].push(m);
+      const key = `${y}-${m}`;
+      if (!meta.day[key]) meta.day[key] = [];
+      if (!meta.day[key].includes(d)) meta.day[key].push(d);
+    }));
+    meta.year.data.sort((a, b) => a - b);
+    Object.values(meta.month).forEach(arr => arr.sort((a, b) => a - b));
+    Object.values(meta.day).forEach(arr => arr.sort((a, b) => a - b));
+    return meta;
   } catch (error) {
     console.error('Error fetching date metadata:', error);
     return null;

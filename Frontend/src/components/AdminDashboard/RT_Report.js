@@ -1,5 +1,4 @@
 ﻿import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { parameterUnits } from './ParameterDetails';
 import { calculateWQI } from './OWQAdmin'; 
 import StationRanking from './StationRanking'; 
 import HoverModal from '../hoverModal'; // import HoverModal
@@ -60,7 +59,7 @@ const RT_Report = () => {
   // Example usage inside fetchWaterData
   const fetchWaterData = useCallback(async () => {
     try {
-      const response = await fetch(`process.env.REACT_APP_API_URL/sensors/recent-data`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/sensors/recent-data`);
       const data = await response.json();
       const dataArray = Array.isArray(data) ? data : [data];
       // Rename "temperature" to "Temp" in the fetched data
