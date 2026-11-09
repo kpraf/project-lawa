@@ -45,7 +45,8 @@ def param_for(header):
 
 
 def parse_value(raw):
-    """Numbers pass through; '<DL' (below detection limit) becomes the detection limit; '*' and blanks are missing."""
+    """Numbers pass through; '<DL' (below detection limit) becomes half the detection limit,
+    matching the 2016-2023 data (e.g. <1 -> 0.5); '*' and blanks are missing."""
     if raw is None:
         return None
     if isinstance(raw, (int, float)):
@@ -53,7 +54,7 @@ def parse_value(raw):
     text = str(raw).strip()
     if text.startswith("<"):
         try:
-            return float(text[1:])
+            return float(text[1:]) / 2
         except ValueError:
             return None
     try:
